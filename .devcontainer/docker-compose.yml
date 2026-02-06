@@ -10,7 +10,7 @@ services:
 
     environment:
       - DISPLAY=${DISPLAY}
-      - XAUTHORITY=/home/ros/.Xauthority
+      - XAUTHORITY=/tmp/.docker.xauth
       - XDG_RUNTIME_DIR=/tmp/runtime-ros
       - QT_X11_NO_MITSHM=1
       - QT_QPA_PLATFORM=xcb
@@ -24,7 +24,7 @@ services:
     volumes:
       - ..:/workspace:cached
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${HOME}/.Xauthority:/home/ros/.Xauthority:ro
+      - ${HOME}/.Xauthority:/tmp/.docker.xauth:ro
     devices:
       - /dev/dri:/dev/dri
     group_add:

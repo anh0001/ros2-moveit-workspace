@@ -64,7 +64,7 @@ src/
 
 On your host machine:
 ```bash
-xhost +local:
+xhost +SI:localuser:$(id -un)
 ```
 
 If you are connected over SSH with X11 forwarding (`DISPLAY=localhost:10.0` style),
@@ -73,6 +73,8 @@ make sure your host has a valid Xauthority cookie:
 echo $DISPLAY
 ls -l ~/.Xauthority
 ```
+
+The devcontainer copies this cookie into `.devcontainer/.docker.xauth` during startup.
 
 ### Step 3: Open in VSCode (Recommended)
 
@@ -236,7 +238,7 @@ This launches RViz with fake controllers for testing.
 cd ~/codes/ros2-moveit-workspace/.devcontainer
 
 # Enable X11
-xhost +local:
+xhost +SI:localuser:$(id -un)
 
 # Build and start container
 docker-compose build
@@ -259,14 +261,14 @@ docker-compose down
 
 ```bash
 # On host
-xhost +local:
+xhost +SI:localuser:$(id -un)
 echo $DISPLAY  # Can be :0/:1 (local) or localhost:10.0 (SSH X11 forwarding)
 ls -l ~/.Xauthority
 
 # Inside container
 echo $DISPLAY  # Should match host
 echo $XAUTHORITY
-ls -l /home/ros/.Xauthority
+ls -l /tmp/.docker.xauth
 ls -l /dev/dri
 xeyes          # Test window should appear
 glxinfo -B     # Renderer info should print without libGL errors

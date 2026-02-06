@@ -6,17 +6,19 @@
   },
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "initializeCommand": "bash -lc '\"${localWorkspaceFolder}/.devcontainer/scripts/prepare-xauth.sh\" \"${localWorkspaceFolder}/.devcontainer/.docker.xauth\" \"${localEnv:DISPLAY}\"'",
 
   "runArgs": [
     "--network=host",
     "--ipc=host",
     "--device=/dev/dri",
-    "--group-add=video"
+    "--group-add=video",
+    "--add-host=host.docker.internal:host-gateway"
   ],
 
   "containerEnv": {
     "DISPLAY": "${localEnv:DISPLAY}",
-    "XAUTHORITY": "/home/ros/.Xauthority",
+    "XAUTHORITY": "/tmp/.docker.xauth",
     "XDG_RUNTIME_DIR": "/tmp/runtime-ros",
     "QT_X11_NO_MITSHM": "1",
     "QT_QPA_PLATFORM": "xcb",
@@ -30,7 +32,7 @@
 
   "mounts": [
     "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
-    "source=${localEnv:HOME}/.Xauthority,target=/home/ros/.Xauthority,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/.devcontainer/.docker.xauth,target=/tmp/.docker.xauth,type=bind"
   ],
 
   "customizations": {
@@ -62,6 +64,7 @@
   },
 
   "postCreateCommand": "bash -lc 'set -e; sudo apt-get update; sudo rosdep init 2>/dev/null || true; rosdep update; cd /workspace; rosdep install --from-paths src --ignore-src -r -y'",
+  "postStartCommand": "bash -lc 'set -e; mkdir -p \"${XDG_RUNTIME_DIR:-/tmp/runtime-ros}\"; chmod 700 \"${XDG_RUNTIME_DIR:-/tmp/runtime-ros}\"; if [ -n \"${DISPLAY:-}\" ] && [ -f \"${XAUTHORITY:-/tmp/.docker.xauth}\" ]; then xauth nlist \"$DISPLAY\" 2>/dev/null | sed -e \"s/^..../ffff/\" | xauth -f \"${XAUTHORITY:-/tmp/.docker.xauth}\" nmerge - 2>/dev/null || true; fi'",
 
   "updateRemoteUserUID": true,
   "remoteUser": "ros"
