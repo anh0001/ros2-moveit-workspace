@@ -27,6 +27,11 @@ A generic, reusable development container for creating MoveIt configurations for
 
 3. **VSCode** with "Dev Containers" extension (recommended)
 4. **X11 server** configured
+5. **Linux host GPU device available** for RViz hardware GLX:
+   ```bash
+   ls -l /dev/dri
+   stat -c '%g' /dev/dri/renderD128  # render group GID (this repo defaults to 110)
+   ```
 
 ## Quick Start
 
@@ -263,8 +268,17 @@ ls -l ~/.Xauthority
 echo $DISPLAY  # Should match host
 echo $XAUTHORITY
 ls -l /home/ros/.Xauthority
+ls -l /dev/dri
+id             # should include group 110 for /dev/dri/renderD*
 xeyes          # Test window should appear
+glxinfo -B     # Renderer info should print without libGL errors
 rviz2          # RViz2 window should open over X11
+```
+
+If your host render group is not `110`, update `.devcontainer/devcontainer.json`
+and `.devcontainer/docker-compose.yml` to the GID from:
+```bash
+stat -c '%g' /dev/dri/renderD128
 ```
 
 ### GPU Not Working

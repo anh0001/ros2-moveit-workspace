@@ -94,7 +94,10 @@ docker-compose down
 # X11 not working
 xhost +local:docker  # On host
 echo $DISPLAY        # Should show :0 or :1
+stat -c '%g' /dev/dri/renderD128  # Should match configured render GID (110 by default)
 xeyes                # Test window
+glxinfo -B           # Verify OpenGL renderer in container
+ls -l /dev/dri       # Confirm GPU device passthrough
 
 # Package not found
 rosdep install --from-paths src --ignore-src -r -y

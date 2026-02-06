@@ -9,7 +9,10 @@
 
   "runArgs": [
     "--network=host",
-    "--ipc=host"
+    "--ipc=host",
+    "--device=/dev/dri",
+    "--group-add=video",
+    "--group-add=110"
   ],
 
   "containerEnv": {

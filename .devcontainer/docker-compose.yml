@@ -22,6 +22,11 @@ services:
       - ..:/workspace:cached
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${HOME}/.Xauthority:/home/ros/.Xauthority:ro
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - video
+      - "110"
 
     network_mode: host
     ipc: host
