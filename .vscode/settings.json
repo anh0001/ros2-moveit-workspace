@@ -1,0 +1,77 @@
+{
+  // ROS settings
+  "ros.distro": "humble",
+  "ros.rosSetupScript": "/opt/ros/humble/setup.bash",
+
+  // Python settings
+  "python.autoComplete.extraPaths": [
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+
+  // C++ settings
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/**",
+    "/opt/ros/humble/include/**",
+    "/usr/include/**"
+  ],
+  "C_Cpp.default.compilerPath": "/usr/bin/g++",
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+
+  // CMake settings
+  "cmake.configureOnOpen": false,
+  "cmake.sourceDirectory": "${workspaceFolder}/src",
+
+  // File associations
+  "files.associations": {
+    "*.repos": "yaml",
+    "*.world": "xml",
+    "*.xacro": "xml",
+    "*.urdf": "xml",
+    "*.srdf": "xml",
+    "*.launch": "xml"
+  },
+
+  // XML formatting
+  "xml.format.maxLineWidth": 100,
+  "xml.format.splitAttributes": true,
+
+  // Terminal settings
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/bin/bash",
+      "args": [
+        "-c",
+        "source /opt/ros/humble/setup.bash && source /workspace/install/setup.bash 2>/dev/null || true && exec bash"
+      ]
+    }
+  },
+
+  // Editor settings
+  "editor.formatOnSave": false,
+  "editor.tabSize": 2,
+  "editor.rulers": [100],
+
+  // Files to exclude from explorer
+  "files.exclude": {
+    "**/.git": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/build": true,
+    "**/install": true,
+    "**/log": true
+  },
+
+  // Search exclusions
+  "search.exclude": {
+    "**/build": true,
+    "**/install": true,
+    "**/log": true
+  }
+}
