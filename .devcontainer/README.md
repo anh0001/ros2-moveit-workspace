@@ -4,22 +4,24 @@ A generic, reusable development container for creating MoveIt configurations for
 
 ## Features
 
-- **Base Image**: Official `moveit/moveit2:humble-release`
+- **Base Image**: Official `osrf/ros:humble-desktop-full`
 - **ROS 2 Humble**: Full installation with all core packages
 - **MoveIt 2**: Complete stack including Setup Assistant
 - **X11 Forwarding**: GUI support for RViz and Setup Assistant
-- **GPU Acceleration**: NVIDIA GPU support for visualization
+- **GPU Acceleration**: Optional NVIDIA GPU passthrough for visualization
 - **Development Tools**: git, cmake, colcon, rosdep, VSCode extensions
 
 ## Prerequisites
 
 1. **Docker** installed and running
-2. **NVIDIA Docker Runtime** (for GPU support):
+2. **NVIDIA Container Toolkit** (optional, only if you want GPU acceleration):
    ```bash
-   distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-   curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-   curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-   sudo apt-get update && sudo apt-get install -y nvidia-docker2
+   curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+   curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+   sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+   sudo nvidia-ctk runtime configure --runtime=docker
    sudo systemctl restart docker
    ```
 
@@ -58,7 +60,14 @@ src/
 
 On your host machine:
 ```bash
-xhost +local:docker
+xhost +local:
+```
+
+If you are connected over SSH with X11 forwarding (`DISPLAY=localhost:10.0` style),
+make sure your host has a valid Xauthority cookie:
+```bash
+echo $DISPLAY
+ls -l ~/.Xauthority
 ```
 
 ### Step 3: Open in VSCode (Recommended)
@@ -223,7 +232,7 @@ This launches RViz with fake controllers for testing.
 cd ~/codes/ros2-moveit-workspace/.devcontainer
 
 # Enable X11
-xhost +local:docker
+xhost +local:
 
 # Build and start container
 docker-compose build
@@ -246,12 +255,16 @@ docker-compose down
 
 ```bash
 # On host
-xhost +local:docker
-echo $DISPLAY  # Should show something like :0 or :1
+xhost +local:
+echo $DISPLAY  # Can be :0/:1 (local) or localhost:10.0 (SSH X11 forwarding)
+ls -l ~/.Xauthority
 
 # Inside container
 echo $DISPLAY  # Should match host
+echo $XAUTHORITY
+ls -l /home/ros/.Xauthority
 xeyes          # Test window should appear
+rviz2          # RViz2 window should open over X11
 ```
 
 ### GPU Not Working

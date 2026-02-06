@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   ros2-moveit:
@@ -8,44 +8,23 @@ services:
     container_name: ros2-moveit-workspace
     image: ros2-moveit-workspace:latest
 
-    # Enable X11 forwarding
     environment:
       - DISPLAY=${DISPLAY}
+      - XAUTHORITY=/home/ros/.Xauthority
       - QT_X11_NO_MITSHM=1
+      - QT_QPA_PLATFORM=xcb
       - LIBGL_ALWAYS_SOFTWARE=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - NVIDIA_DRIVER_CAPABILITIES=all
       - NVIDIA_VISIBLE_DEVICES=all
-      - ROS_DOMAIN_ID=0
-      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
-    # Mount workspace and X11 socket
     volumes:
       - ..:/workspace:cached
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${HOME}/.Xauthority:/home/ros/.Xauthority:ro
 
-    # Network and device access
     network_mode: host
-    privileged: true
-
-    # GPU access (NVIDIA)
-    runtime: nvidia
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-    # Security options
-    security_opt:
-      - seccomp:unconfined
-      - apparmor:unconfined
-
-    # Keep container running
+    ipc: host
     stdin_open: true
     tty: true
-
-    # Command to run
-    command: /bin/bash -c "while sleep 1000; do :; done"
+    command: /bin/bash -lc "while sleep 1000; do :; done"

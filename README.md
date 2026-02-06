@@ -14,6 +14,7 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
 2. **Open in VSCode**:
    ```bash
    xhost +local:docker  # Enable X11
+   ls -l ~/.Xauthority  # Required when DISPLAY is localhost:10.0 via SSH
    code .               # Open in VSCode
    # Press F1 → "Dev Containers: Reopen in Container"
    ```
