@@ -76,7 +76,9 @@ WORKDIR /workspace
 # Shell setup for ROS + workspace overlays
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc \
     && echo "if [ -f /workspace/install/setup.bash ]; then source /workspace/install/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
-    && echo "alias glx-check='echo DISPLAY=\$DISPLAY; glxinfo -B'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias glx-check='echo DISPLAY=\$DISPLAY; xdpyinfo | grep -i glx; glxinfo -B 2>/dev/null || echo \"GLX not available\"'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias rviz2-safe='LIBGL_ALWAYS_SOFTWARE=1 LIBGL_ALWAYS_INDIRECT=1 LIBGL_DRI3_DISABLE=1 GALLIUM_DRIVER=llvmpipe QT_X11_NO_MITSHM=1 rviz2'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias setup-assistant-safe='/workspace/scripts/launch_setup_assistant_safe.sh'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cb='cd /workspace && colcon build --symlink-install'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cbs='cd /workspace && colcon build --symlink-install --packages-select'" >> /home/${USERNAME}/.bashrc
 
