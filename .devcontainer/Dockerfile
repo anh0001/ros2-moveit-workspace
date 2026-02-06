@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     xauth \
     x11-apps \
+    libgl1-mesa-dri \
+    libglx-mesa0 \
     mesa-utils \
     qtwayland5 \
     libx11-xcb1 \
@@ -42,7 +44,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Environment defaults for RViz2/MoveIt GUI in containers
 ENV QT_X11_NO_MITSHM=1
 ENV QT_QPA_PLATFORM=xcb
-ENV LIBGL_ALWAYS_SOFTWARE=0
+ENV XDG_RUNTIME_DIR=/tmp/runtime-ros
+ENV LIBGL_ALWAYS_SOFTWARE=1
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -59,6 +62,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 
 # Workspace directory used by devcontainer.json
 RUN mkdir -p /workspace/src && chown -R ${USERNAME}:${USERNAME} /workspace
+RUN mkdir -p /tmp/runtime-ros && chown -R ${USERNAME}:${USERNAME} /tmp/runtime-ros && chmod 700 /tmp/runtime-ros
 
 USER ${USERNAME}
 WORKDIR /workspace

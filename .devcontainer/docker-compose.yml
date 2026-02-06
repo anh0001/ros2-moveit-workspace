@@ -11,9 +11,10 @@ services:
     environment:
       - DISPLAY=${DISPLAY}
       - XAUTHORITY=/home/ros/.Xauthority
+      - XDG_RUNTIME_DIR=/tmp/runtime-ros
       - QT_X11_NO_MITSHM=1
       - QT_QPA_PLATFORM=xcb
-      - LIBGL_ALWAYS_SOFTWARE=0
+      - LIBGL_ALWAYS_SOFTWARE=1
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - NVIDIA_DRIVER_CAPABILITIES=all
       - NVIDIA_VISIBLE_DEVICES=all
@@ -26,7 +27,6 @@ services:
       - /dev/dri:/dev/dri
     group_add:
       - video
-      - "110"
 
     network_mode: host
     ipc: host
