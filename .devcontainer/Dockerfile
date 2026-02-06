@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     xauth \
     x11-apps \
+    x11-utils \
     libgl1-mesa-dri \
     libglx-mesa0 \
     mesa-utils \
@@ -46,6 +47,8 @@ ENV QT_X11_NO_MITSHM=1
 ENV QT_QPA_PLATFORM=xcb
 ENV XDG_RUNTIME_DIR=/tmp/runtime-ros
 ENV LIBGL_ALWAYS_SOFTWARE=1
+ENV LIBGL_DRI3_DISABLE=1
+ENV MESA_LOADER_DRIVER_OVERRIDE=llvmpipe
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -70,6 +73,9 @@ WORKDIR /workspace
 # Shell setup for ROS + workspace overlays
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc \
     && echo "if [ -f /workspace/install/setup.bash ]; then source /workspace/install/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
+    && echo "if [[ \"\${DISPLAY:-}\" == localhost:* || \"\${DISPLAY:-}\" == 127.0.0.1:* ]]; then export LIBGL_ALWAYS_INDIRECT=1; export LIBGL_DRI3_DISABLE=1; export MESA_LOADER_DRIVER_OVERRIDE=llvmpipe; fi" >> /home/${USERNAME}/.bashrc \
+    && echo "alias rviz2-safe='LIBGL_ALWAYS_INDIRECT=1 LIBGL_DRI3_DISABLE=1 MESA_LOADER_DRIVER_OVERRIDE=llvmpipe rviz2'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias glx-check='echo DISPLAY=\$DISPLAY; xdpyinfo | grep -i GLX || true; glxinfo -B'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cb='cd /workspace && colcon build --symlink-install'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cbs='cd /workspace && colcon build --symlink-install --packages-select'" >> /home/${USERNAME}/.bashrc
 

@@ -15,6 +15,8 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
    ```bash
    xhost +local:docker  # Enable X11
    ls -l ~/.Xauthority  # Required when DISPLAY is localhost:10.0 via SSH
+   # If using SSH X11 forwarding, prefer trusted forwarding:
+   # ssh -Y <user>@<docker-host>
    code .               # Open in VSCode
    # Press F1 → "Dev Containers: Reopen in Container"
    ```
@@ -25,6 +27,9 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
    cd /workspace
    colcon build --symlink-install
    source install/setup.bash
+   glx-check
+   # If DISPLAY is localhost:10.0 and rviz2 fails, use:
+   # rviz2-safe
    ros2 launch moveit_setup_assistant setup_assistant.launch.py
    ```
 

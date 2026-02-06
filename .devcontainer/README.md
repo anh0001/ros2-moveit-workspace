@@ -278,6 +278,27 @@ to avoid host-specific GLX/GPU mismatches. If you want hardware acceleration,
 set `LIBGL_ALWAYS_SOFTWARE=0` in the container environment and ensure your
 NVIDIA runtime/device access is configured correctly.
 
+If `DISPLAY` is `localhost:10.0` (SSH forwarding), use trusted forwarding and
+indirect GLX:
+```bash
+# On SSH client/host side when connecting to the Docker machine
+ssh -Y <user>@<docker-host>
+
+# Inside container
+glx-check
+rviz2-safe
+```
+
+`rviz2-safe` forces:
+- `LIBGL_ALWAYS_INDIRECT=1`
+- `LIBGL_DRI3_DISABLE=1`
+- `MESA_LOADER_DRIVER_OVERRIDE=llvmpipe`
+
+If `glx-check` shows no `GLX` extension from `xdpyinfo`, that SSH-forwarded
+display cannot create OpenGL contexts and RViz2 will not run there. In that
+case, use a local desktop display (`:0`) on the Docker host or a GLX-capable
+remote desktop solution.
+
 ### GPU Not Working
 
 Test NVIDIA runtime:
