@@ -4,24 +4,31 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
 
 ## 🚀 Quick Start
 
-1. **Add your robot packages** to `src/`:
+1. **Enable X11 access on host** (run this first, before rebuilding container):
+   ```bash
+   xhost +SI:localuser:$(id -un)
+   ```
+
+2. **Add your robot packages** to `src/`:
    ```bash
    cd src/
    # Copy, clone, or symlink your robot description packages
    cp -r /path/to/your_robot_description .
    ```
 
-2. **Open in VSCode**:
+3. **Open in VSCode and rebuild container**:
    ```bash
-   xhost +SI:localuser:$(id -un)  # Enable X11 for your local user
-   ls -l ~/.Xauthority  # Required when DISPLAY is localhost:10.0 via SSH
-   # If using SSH X11 forwarding, prefer trusted forwarding:
-   # ssh -Y <user>@<docker-host>
-   code .               # Open in VSCode
-   # Press F1 → "Dev Containers: Reopen in Container"
+   code .  # Open in VSCode
+   # Press F1 → "Dev Containers: Rebuild and Reopen in Container"
    ```
 
-3. **Build and launch Setup Assistant**:
+   **Note:** If using SSH X11 forwarding:
+   ```bash
+   ls -l ~/.Xauthority  # Verify .Xauthority exists
+   # Prefer trusted forwarding: ssh -Y <user>@<docker-host>
+   ```
+
+4. **Build and launch Setup Assistant**:
    ```bash
    # Inside container
    cd /workspace
@@ -33,9 +40,9 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
    ros2 launch moveit_setup_assistant setup_assistant.launch.py
    ```
 
-4. **Follow the Setup Assistant GUI** to create your MoveIt configuration
+5. **Follow the Setup Assistant GUI** to create your MoveIt configuration
 
-5. **Test the generated config**:
+6. **Test the generated config**:
    ```bash
    ros2 launch your_robot_moveit demo.launch.py
    ```
