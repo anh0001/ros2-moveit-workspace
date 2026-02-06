@@ -1,0 +1,84 @@
+{
+  "name": "ROS 2 Humble MoveIt Workspace",
+  "dockerFile": "Dockerfile",
+
+  // Use Docker Compose for easier X11 and GPU configuration
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "ros2-moveit",
+  "workspaceFolder": "/workspace",
+
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "ros",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
+  },
+
+  // VSCode customizations
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-python.python",
+        "ms-iot.vscode-ros",
+        "twxs.cmake",
+        "ms-vscode.cmake-tools",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "dotjoshjohnson.xml"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "args": ["-c", "source /opt/ros/humble/setup.bash && source /workspace/install/setup.bash 2>/dev/null || true && exec bash"]
+          }
+        }
+      }
+    }
+  },
+
+  // Forward X11 display
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "QT_X11_NO_MITSHM": "1",
+    "LIBGL_ALWAYS_SOFTWARE": "0"
+  },
+
+  // Mount X11 socket and workspace
+  "mounts": [
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+    "source=${localEnv:HOME}/.Xauthority,target=/home/ros/.Xauthority,type=bind,consistency=cached"
+  ],
+
+  // Run args for GPU and display
+  "runArgs": [
+    "--network=host",
+    "--privileged",
+    "--security-opt=seccomp=unconfined",
+    "--security-opt=apparmor=unconfined",
+    "--gpus=all",
+    "--runtime=nvidia",
+    "-e", "NVIDIA_DRIVER_CAPABILITIES=all",
+    "-e", "NVIDIA_VISIBLE_DEVICES=all"
+  ],
+
+  // Post-create command to set up the workspace
+  "postCreateCommand": "sudo chown -R ros:ros /workspace && cd /workspace && source /opt/ros/humble/setup.bash && rosdep update && rosdep install --from-paths src --ignore-src -r -y || true",
+
+  // Keep container running
+  "overrideCommand": true,
+
+  // User to run as
+  "remoteUser": "ros"
+}
