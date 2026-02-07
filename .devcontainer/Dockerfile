@@ -53,7 +53,6 @@ ENV QT_X11_NO_MITSHM=1
 ENV QT_QPA_PLATFORM=xcb
 ENV QT_LOGGING_RULES=*.debug=false;qt.qpa.*=false
 ENV LIBGL_ALWAYS_SOFTWARE=1
-ENV LIBGL_ALWAYS_INDIRECT=1
 ENV GALLIUM_DRIVER=llvmpipe
 ENV MESA_GL_VERSION_OVERRIDE=3.3
 ENV LIBGL_DRI3_DISABLE=1
@@ -88,7 +87,7 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc
     && echo "alias setup='source /workspace/install/setup.bash'" >> /home/${USERNAME}/.bashrc \
     && echo "alias setup-assistant='ros2 launch moveit_setup_assistant setup_assistant.launch.py'" >> /home/${USERNAME}/.bashrc \
     && echo "alias glx-check='echo DISPLAY=\$DISPLAY; xdpyinfo | grep -i glx; glxinfo -B 2>/dev/null || echo \"GLX not available\"'" >> /home/${USERNAME}/.bashrc \
-    && echo "alias rviz2-safe='LIBGL_ALWAYS_SOFTWARE=1 LIBGL_ALWAYS_INDIRECT=1 LIBGL_DRI3_DISABLE=1 GALLIUM_DRIVER=llvmpipe QT_X11_NO_MITSHM=1 rviz2'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias rviz2-safe='LIBGL_ALWAYS_SOFTWARE=1 LIBGL_DRI3_DISABLE=1 GALLIUM_DRIVER=llvmpipe QT_X11_NO_MITSHM=1 rviz2'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cb='cd /workspace && colcon build --symlink-install'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cbs='cd /workspace && colcon build --symlink-install --packages-select'" >> /home/${USERNAME}/.bashrc
 
