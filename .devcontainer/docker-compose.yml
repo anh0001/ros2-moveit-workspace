@@ -14,6 +14,15 @@ services:
       - XDG_RUNTIME_DIR=/tmp/runtime-ros
       - QT_X11_NO_MITSHM=1
       - QT_QPA_PLATFORM=xcb
+      - QT_LOGGING_RULES=*.debug=false;qt.qpa.*=false
+      - LIBGL_ALWAYS_SOFTWARE=1
+      - LIBGL_ALWAYS_INDIRECT=1
+      - GALLIUM_DRIVER=llvmpipe
+      - MESA_GL_VERSION_OVERRIDE=3.3
+      - LIBGL_DRI3_DISABLE=1
+      - OGRE_RTT_MODE=Copy
+      - QT_AUTO_SCREEN_SCALE_FACTOR=0
+      - QT_OPENGL=software
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - NVIDIA_DRIVER_CAPABILITIES=all
       - NVIDIA_VISIBLE_DEVICES=all

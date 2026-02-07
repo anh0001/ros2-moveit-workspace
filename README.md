@@ -35,11 +35,8 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
    colcon build --symlink-install
    source install/setup.bash
    
-   # Use the safe launcher to avoid Qt/RViz crashes
-   ./scripts/launch_setup_assistant_safe.sh
-   
-   # Or manually with stability flags:
-   # ros2 launch moveit_setup_assistant setup_assistant.launch.py
+   # Stability flags are now built into the devcontainer env
+   ros2 launch moveit_setup_assistant setup_assistant.launch.py
    ```
 
 5. **Follow the Setup Assistant GUI** to create your MoveIt configuration
@@ -118,7 +115,7 @@ Works with any robot, including:
 3. **Clean builds when switching** between container and host
 4. **Use the demo launch file** to test before connecting hardware
 5. **Refer to devcontainer README** for troubleshooting
-6. **If Setup Assistant crashes**, use `./scripts/launch_setup_assistant_safe.sh` which applies stability workarounds
+6. **Rebuild devcontainer after updates** so the latest graphics stability defaults are applied
 
 ## 🐛 Troubleshooting
 
@@ -127,18 +124,11 @@ Works with any robot, including:
 If you encounter a segmentation fault in RViz/PropertyTreeModel:
 
 ```bash
-# Use the safe launcher (recommended)
-./scripts/launch_setup_assistant_safe.sh
-
-# Or set these environment variables manually:
-export LIBGL_ALWAYS_SOFTWARE=1
-export LIBGL_DRI3_DISABLE=1
-export QT_X11_NO_MITSHM=1
-export GALLIUM_DRIVER=llvmpipe
+# Use the default launch command (safe env flags are preconfigured in devcontainer)
 ros2 launch moveit_setup_assistant setup_assistant.launch.py
 ```
 
-This forces software rendering and disables problematic GPU acceleration features that can cause crashes in containerized environments.
+If you still see crashes, rebuild/reopen the devcontainer so updated environment defaults are active.
 
 ### X11 Connection Issues
 

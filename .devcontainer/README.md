@@ -275,10 +275,20 @@ glxinfo -B     # Renderer info should print without libGL errors
 rviz2          # RViz2 window should open over X11
 ```
 
-The devcontainer defaults to Mesa software rendering (`LIBGL_ALWAYS_SOFTWARE=1`)
-to avoid host-specific GLX/GPU mismatches. If you want hardware acceleration,
-set `LIBGL_ALWAYS_SOFTWARE=0` in the container environment and ensure your
-NVIDIA runtime/device access is configured correctly.
+The devcontainer defaults to software and Qt stability flags for MoveIt/RViz:
+- `LIBGL_ALWAYS_SOFTWARE=1`
+- `LIBGL_ALWAYS_INDIRECT=1`
+- `LIBGL_DRI3_DISABLE=1`
+- `GALLIUM_DRIVER=llvmpipe`
+- `MESA_GL_VERSION_OVERRIDE=3.3`
+- `QT_X11_NO_MITSHM=1`
+- `QT_QPA_PLATFORM=xcb`
+- `QT_OPENGL=software`
+- `OGRE_RTT_MODE=Copy`
+
+If you want hardware acceleration, set `LIBGL_ALWAYS_SOFTWARE=0` in the
+container environment and ensure your NVIDIA runtime/device access is configured
+correctly.
 
 If `DISPLAY` is `localhost:10.0` (SSH forwarding), use trusted forwarding and
 indirect GLX:
@@ -294,7 +304,7 @@ rviz2-safe
 `rviz2-safe` forces:
 - `LIBGL_ALWAYS_INDIRECT=1`
 - `LIBGL_DRI3_DISABLE=1`
-- `MESA_LOADER_DRIVER_OVERRIDE=llvmpipe`
+- `GALLIUM_DRIVER=llvmpipe`
 
 If `glx-check` shows no `GLX` extension from `xdpyinfo`, that SSH-forwarded
 display cannot create OpenGL contexts and RViz2 will not run there. In that
@@ -367,6 +377,7 @@ Inside the container:
 cb      # cd /workspace && colcon build --symlink-install
 cbs     # colcon build --symlink-install --packages-select
 setup   # source /workspace/install/setup.bash
+setup-assistant  # ros2 launch moveit_setup_assistant setup_assistant.launch.py
 ```
 
 ## References

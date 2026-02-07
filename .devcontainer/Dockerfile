@@ -51,6 +51,15 @@ RUN locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 # Environment defaults for RViz2/MoveIt GUI in containers
 ENV QT_X11_NO_MITSHM=1
 ENV QT_QPA_PLATFORM=xcb
+ENV QT_LOGGING_RULES=*.debug=false;qt.qpa.*=false
+ENV LIBGL_ALWAYS_SOFTWARE=1
+ENV LIBGL_ALWAYS_INDIRECT=1
+ENV GALLIUM_DRIVER=llvmpipe
+ENV MESA_GL_VERSION_OVERRIDE=3.3
+ENV LIBGL_DRI3_DISABLE=1
+ENV OGRE_RTT_MODE=Copy
+ENV QT_AUTO_SCREEN_SCALE_FACTOR=0
+ENV QT_OPENGL=software
 ENV XDG_RUNTIME_DIR=/tmp/runtime-ros
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=all
@@ -76,9 +85,10 @@ WORKDIR /workspace
 # Shell setup for ROS + workspace overlays
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc \
     && echo "if [ -f /workspace/install/setup.bash ]; then source /workspace/install/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
+    && echo "alias setup='source /workspace/install/setup.bash'" >> /home/${USERNAME}/.bashrc \
+    && echo "alias setup-assistant='ros2 launch moveit_setup_assistant setup_assistant.launch.py'" >> /home/${USERNAME}/.bashrc \
     && echo "alias glx-check='echo DISPLAY=\$DISPLAY; xdpyinfo | grep -i glx; glxinfo -B 2>/dev/null || echo \"GLX not available\"'" >> /home/${USERNAME}/.bashrc \
     && echo "alias rviz2-safe='LIBGL_ALWAYS_SOFTWARE=1 LIBGL_ALWAYS_INDIRECT=1 LIBGL_DRI3_DISABLE=1 GALLIUM_DRIVER=llvmpipe QT_X11_NO_MITSHM=1 rviz2'" >> /home/${USERNAME}/.bashrc \
-    && echo "alias setup-assistant-safe='/workspace/scripts/launch_setup_assistant_safe.sh'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cb='cd /workspace && colcon build --symlink-install'" >> /home/${USERNAME}/.bashrc \
     && echo "alias cbs='cd /workspace && colcon build --symlink-install --packages-select'" >> /home/${USERNAME}/.bashrc
 
