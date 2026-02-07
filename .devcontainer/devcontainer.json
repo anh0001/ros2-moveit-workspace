@@ -6,7 +6,7 @@
   },
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-  "initializeCommand": "bash -lc '\"${localWorkspaceFolder}/.devcontainer/scripts/prepare-xauth.sh\" \"${localWorkspaceFolder}/.devcontainer/.docker.xauth\" \":0\" \"${localEnv:XAUTHORITY}\"'",
+  "initializeCommand": "bash -lc '\"${localWorkspaceFolder}/.devcontainer/scripts/init-x11.sh\" \"${localWorkspaceFolder}/.devcontainer/.docker.xauth\"'",
 
   "runArgs": [
     "--network=host",
@@ -19,7 +19,7 @@
   ],
 
   "containerEnv": {
-    "DISPLAY": ":0",
+    "DISPLAY": ":1",
     "XAUTHORITY": "/tmp/.docker.xauth",
     "XDG_RUNTIME_DIR": "/tmp/runtime-ros",
     "QT_X11_NO_MITSHM": "1",

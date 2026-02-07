@@ -4,10 +4,11 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
 
 ## 🚀 Quick Start
 
-1. **Enable X11 access on host** (run this first, before rebuilding container):
-   ```bash
-   xhost +SI:localuser:$(id -un)
-   ```
+1. **X11 Display Setup** (automatic):
+   - The container **auto-detects** your X11 display (`:0`, `:1`, etc.)
+   - X11 access is automatically enabled during container build
+   - **Manual override**: `export X11_DISPLAY=:0` before rebuilding
+   - See [`.devcontainer/X11-CONFIG.md`](.devcontainer/X11-CONFIG.md) for details
 
 2. **Add your robot packages** to `src/`:
    ```bash
@@ -132,14 +133,23 @@ If you still see crashes, rebuild/reopen the devcontainer so updated environment
 
 ### X11 Connection Issues
 
+The container automatically detects and configures your X11 display. If you have issues:
+
 ```bash
-# On host, enable X11 access:
-xhost +SI:localuser:$(id -un)
+# Check detected display
+cat .devcontainer/.display.env
+
+# Manually override if needed (on host, before rebuild)
+export X11_DISPLAY=:0  # or :1, :2, etc.
 
 # Inside container, test X11:
 xeyes  # Should show a window
 glx-check  # Check OpenGL capabilities
 ```
+
+**Note:** X11 access is now automatically enabled during container initialization. No manual `xhost` command needed unless rebuilding fails.
+
+For detailed X11 configuration options, see [`.devcontainer/X11-CONFIG.md`](.devcontainer/X11-CONFIG.md).
 
 ### GPU/Graphics Issues
 
