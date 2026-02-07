@@ -4,6 +4,27 @@ A generic, containerized workspace for creating MoveIt configurations for any ro
 
 ## 🚀 Quick Start
 
+### First-Time Setup (Cloning the Repository)
+
+If you're cloning this repository for the first time:
+
+```bash
+# Clone with submodules
+git clone --recurse-submodules https://github.com/anh0001/ros2-moveit-workspace.git
+cd ros2-moveit-workspace
+```
+
+**OR** if you already cloned without submodules:
+
+```bash
+cd ros2-moveit-workspace
+git submodule update --init --recursive
+```
+
+This will initialize the `src/rviz` submodule which contains bug fixes for the MoveIt Setup Assistant.
+
+### Standard Usage
+
 1. **X11 Display Setup** (automatic):
    - The container **auto-detects** your X11 display (`:0`, `:1`, etc.)
    - X11 access is automatically enabled during container build
