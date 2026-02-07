@@ -2,6 +2,8 @@
 
 A generic, containerized workspace for creating MoveIt configurations for any robot using the MoveIt Setup Assistant. Works with any ROS 2 Humble-compatible robot description.
 
+![MoveIt Setup Assistant GUI](docs/images/setup-assistant-gui.png)
+
 ## 🚀 Quick Start
 
 ### First-Time Setup (Cloning the Repository)
