@@ -1,0 +1,4 @@
+[submodule "src/rviz"]
+	path = src/rviz
+	url = git@github.com:anh0001/rviz.git
+	branch = humble
