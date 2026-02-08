@@ -112,14 +112,21 @@ docker-compose down             # Stop
 ## Example Robot Configurations
 
 <details>
-<summary><b>Ranger Garden Assistant (Mobile Manipulator)</b></summary>
+<summary><b>Ranger Garden Assistant (ranger_piper_moveit)</b></summary>
+
+Complete example of a generated MoveIt configuration package from the Setup Assistant.
 
 - **URDF**: `ranger_description/urdf/ranger_complete.urdf.xacro`
-- **Virtual Joint**: `base_footprint` → `map`, fixed (or planar for mobile manipulation)
-- **Planning Groups**: `piper_arm` (chain: `piper_world` → `piper_link_6`, KDL solver), `piper_gripper` (`piper_joint_gripper`, no solver)
-- **End Effector**: `piper_gripper` on `piper_link_6`, parent group `piper_arm`
-- **Passive Joints**: all wheel and steering joints (`fl_wheel`, `fr_wheel`, etc.)
-- **Save to**: `/workspace/src/ranger_piper_moveit`
+- **Virtual Joint**: `base_footprint` → `map` (fixed)
+- **Planning Groups**: `piper_arm` (chain: `piper_world` → `piper_link_6`, KDL), `piper_gripper`
+- **End Effector**: `piper_gripper` on `piper_link_6`
+- **Package**: `/workspace/src/ranger_piper_moveit/`
+
+Test it:
+```bash
+ros2 launch ranger_piper_moveit demo.launch.py
+```
+
 </details>
 
 <details>

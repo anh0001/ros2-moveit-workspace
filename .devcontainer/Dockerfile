@@ -42,6 +42,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-moveit \
     ros-humble-moveit-setup-assistant \
     ros-humble-moveit-resources-panda-description \
+    ros-humble-ros2-controllers \
     ros-humble-rmw-cyclonedds-cpp \
     && rm -rf /var/lib/apt/lists/*
 
