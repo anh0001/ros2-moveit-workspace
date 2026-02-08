@@ -118,9 +118,11 @@ Complete example of a generated MoveIt configuration package from the Setup Assi
 
 - **URDF**: `ranger_description/urdf/ranger_complete.urdf.xacro`
 - **Virtual Joint**: `base_footprint` → `map` (fixed)
-- **Planning Groups**: `piper_arm` (chain: `piper_world` → `piper_link_6`, KDL), `piper_gripper`
+- **Planning Groups**: `piper_arm` (chain: `piper_base_link` → `piper_link6`, KDL), `piper_gripper`, `mobile_base`, `mobile_manipulator`
 - **End Effector**: `piper_gripper` on `piper_link_6`
 - **Package**: `/workspace/src/ranger_piper_moveit/`
+
+**Future improvement:** Replace KDL with [TRAC-IK](https://github.com/aprotyas/trac_ik) (`trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin`) for more robust IK solving. TRAC-IK combines Newton-Raphson with SQP optimization to escape local minima, giving significantly higher solve rates near joint limits. No apt package exists for Humble — requires building from source (`git clone -b ros2 https://github.com/aprotyas/trac_ik.git` into `src/`).
 
 Test it:
 ```bash
